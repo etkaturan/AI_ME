@@ -5,6 +5,9 @@ from sqlalchemy import Column, String, Date, DateTime, Float, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship
 
+
+from pgvector.sqlalchemy import Vector
+
 from database import Base
 
 
@@ -37,3 +40,15 @@ class Fact(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     person = relationship("Person", back_populates="facts")
+
+class MemoryEntry(Base):
+    __tablename__ = "memory_entries"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    person_id = Column(UUID(as_uuid=True), ForeignKey("persons.id"), nullable=False)
+    category = Column(String, nullable=True)          # e.g. 'work', 'family', 'health'
+    timestamp = Column(DateTime, nullable=True)
+    text = Column(String, nullable=False)              # the actual diary/story content
+    embedding = Column(Vector(384), nullable=True)      # filled in once we add an embedding model
+    entry_metadata = Column(JSONB, default=dict)        # emotion, tags, related_people, etc. — added freely later
+    created_at = Column(DateTime, default=datetime.utcnow)
