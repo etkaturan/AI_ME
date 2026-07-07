@@ -1,6 +1,9 @@
 from fastapi import FastAPI, Depends
 from sqlalchemy import text
 from sqlalchemy.orm import Session
+from models import Person, Fact
+from schemas import PersonCreate, PersonRead, FactCreate, FactRead
+
 
 from database import get_db
 from models import Person
@@ -32,3 +35,17 @@ def create_person(person: PersonCreate, db: Session = Depends(get_db)):
 @app.get("/persons/{person_id}", response_model=PersonRead)
 def read_person(person_id: str, db: Session = Depends(get_db)):
     return db.query(Person).filter(Person.id == person_id).first()
+
+
+@app.post("/facts", response_model=FactRead)
+def create_fact(fact: FactCreate, db: Session = Depends(get_db)):
+    db_fact = Fact(**fact.model_dump())
+    db.add(db_fact)
+    db.commit()
+    db.refresh(db_fact)
+    return db_fact
+
+
+@app.get("/persons/{person_id}/facts", response_model=list[FactRead])
+def read_facts(person_id: str, db: Session = Depends(get_db)):
+    return db.query(Fact).filter(Fact.person_id == person_id).all()

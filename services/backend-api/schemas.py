@@ -20,3 +20,32 @@ class PersonRead(BaseModel):
 
     class Config:
         from_attributes = True
+
+from typing import Any
+
+
+class FactCreate(BaseModel):
+    person_id: uuid.UUID
+    category: str
+    key: str
+    value: Any
+    valid_from: date | None = None
+    valid_to: date | None = None
+    source: str | None = None
+    confidence: float = 1.0
+
+
+class FactRead(BaseModel):
+    id: uuid.UUID
+    person_id: uuid.UUID
+    category: str
+    key: str
+    value: Any
+    valid_from: date | None
+    valid_to: date | None
+    source: str | None
+    confidence: float
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
