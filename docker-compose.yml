@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: etka_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: etka_dev
+      POSTGRES_PASSWORD: etka_dev_password
+      POSTGRES_DB: etka_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - etka_pgdata:/var/lib/postgresql/data
+
+volumes:
+  etka_pgdata:
