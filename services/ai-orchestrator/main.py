@@ -23,7 +23,7 @@ def health_check():
 
 @app.post("/chat")
 async def chat(request: ChatRequest, db: Session = Depends(get_db)):
-    system_prompt = build_system_prompt(request.person_id, db)
+    system_prompt = build_system_prompt(request.person_id, request.message, db)
 
     response = await provider.generate(
         messages=[{"role": "user", "content": request.message}],
