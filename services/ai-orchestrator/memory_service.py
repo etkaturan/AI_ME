@@ -9,7 +9,7 @@ from models import MemoryEntry
 _model = SentenceTransformer("all-MiniLM-L6-v2")
 
 
-def create_memory(person_id: str, text: str, category: str | None, db: Session) -> MemoryEntry:
+def create_memory(person_id: str, text: str, category: str | None, db: Session, timestamp: datetime | None = None) -> MemoryEntry:
     embedding = _model.encode(text).tolist()
 
     entry = MemoryEntry(
@@ -18,7 +18,7 @@ def create_memory(person_id: str, text: str, category: str | None, db: Session) 
         category=category,
         text=text,
         embedding=embedding,
-        timestamp=datetime.utcnow(),
+        timestamp=timestamp or datetime.utcnow(),
     )
     db.add(entry)
     db.commit()

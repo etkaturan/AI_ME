@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+from datetime import datetime
 
 from groq_adapter import GroqAdapter
 from database import get_db
@@ -35,13 +36,13 @@ class MemoryCreate(BaseModel):
     person_id: str
     text: str
     category: str | None = None
+    timestamp: datetime | None = None
 
 
 @app.post("/memories")
 def add_memory(request: MemoryCreate, db: Session = Depends(get_db)):
-    entry = create_memory(request.person_id, request.text, request.category, db)
-    return {"id": str(entry.id), "text": entry.text, "category": entry.category}
-
+    entry = create_memory(request.person_id, request.text, request.category, db, request.timestamp)
+    return {"id": str(entry.id), "text": entry.text, "category": entry.category, "timestamp": entry.timestamp}
 
 @app.get("/memories/search")
 def search(person_id: str, query: str, db: Session = Depends(get_db)):
