@@ -13,6 +13,7 @@
 | Version | Date | Changes |
 |---|---|---|
 | 0.1 | 2026-07-07 | Initial architecture: layering, provider abstraction, flexible schema, persona/access model, testing strategy |
+| 0.2 | 2026-07-07 | First working slice built: Postgres + Alembic migrations live; `persons`/`facts` tables in production use. FastAPI backend-api and ai-orchestrator running as separate services (ports 8000/8001). Groq adapter confirmed working end-to-end. Derived-fields utility (age-from-DOB) implemented and verified. System prompt now assembled from real `facts` data with explicit anti-fabrication instruction — first proof that responses are grounded, not invented. Hosting decision (pending final setup): Vercel (frontend) + Hugging Face Spaces (backend) + Supabase (Postgres/pgvector), chosen to avoid Railway-style payment friction. Local dev lesson: a native Windows Postgres service can silently conflict with Docker's Postgres on port 5432 — disable any native `postgresql-x64-*` service before relying on `docker-compose.yml`. |
 
 > Every future architectural decision, addition, or reversal gets a new row here, plus updated sections below. Don't edit history — append. If a decision is later reversed, note it ("superseded by v0.4") rather than deleting it, so we keep a record of *why* things changed.
 
