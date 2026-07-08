@@ -14,7 +14,8 @@ def build_system_prompt(person_id: str, user_message: str, db: Session) -> str:
 
     if person.date_of_birth:
         age = calculate_age(person.date_of_birth)
-        lines.append(f"You are {age} years old.")
+        dob_formatted = person.date_of_birth.strftime("%B %d, %Y")
+        lines.append(f"You were born on {dob_formatted}, which makes you {age} years old.")
 
     if person.place_of_birth:
         lines.append(f"You were born in {person.place_of_birth}.")

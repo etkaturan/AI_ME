@@ -11,6 +11,16 @@ from memory_service import create_memory, search_memories
 app = FastAPI(title="Etka AI Orchestrator")
 provider = GroqAdapter()
 
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 class ChatRequest(BaseModel):
     message: str
